@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/WEB-INF/facelets/templates/indexTemplate.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.Aplicacion}" />
+        </ui:define>
+        <ui:define name="content"  >
+            <p:panel id="pnGral" styleClass="abmparam" >
+                <h:panelGrid columns="2" cellpadding="10" >
+                    <img src="#{request.contextPath}/resources/img/newspaper.png" width="50" height="50" style="float: left; margin-left: 15px" />
+                    <p:outputLabel styleClass="titPanel" value="Listado de #{config.Cert}" />
+                </h:panelGrid>
+                
+                <h:form prependId="false" id="frListCert">
+                    <p:growl id="messages" showDetail="false" />
+                    
+                    <!-- Formulario para la búsqueda de certificados -->
+                    <p:panel id="pnBusqueda" header="Generar Listado" style="margin-bottom:10px;" rendered="#{not mbCert.view}">
+                        <p:outputLabel value="Seleccione la opción de búsqueda de los Certificados y luego complete el parámetro correspondiente. 
+                                       Mediante el botón que corresponda se mostrará un listado con los resultados de la búsqueda que podrá 
+                                       filtrar según sus columnas." 
+                                           style="font-style: italic; font-size: small" />
+                        <h:panelGrid id="pgBusqueda" columns="2" cellpadding="10" >
+                            <h:panelGrid id="pgBusqSelectOpt" columns="2" cellpadding="2" >
+                                <p:outputLabel value="Buscar por: " for="cmbOpt"/>   
+                                <p:selectOneMenu id="cmbOpt" value="#{mbCert.optBusqSelected}" converter="omnifaces.SelectItemsConverter" >
+                                    <f:selectItem itemLabel="Seleccione la Opción" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{mbCert.lstOptBucarCert}" 
+                                                   var="opt" itemLabel="#{opt.nombre}" itemValue="#{opt}"/>
+                                    <p:ajax update="pnBusqueda" />
+                                </p:selectOneMenu> 
+                            </h:panelGrid>
+                            <h:panelGrid id="pgBusqNumGuia" columns="3" cellpadding="2" rendered="#{mbCert.optBusqSelected.id eq 1}" >
+                                <p:outputLabel value="Número: " for="txtCodCertBuscar"/>
+                                <p:inputMask placeholder="#{config.maskCert}" id="txtCodCertBuscar" value="#{mbCert.busqCodCert}" 
+                                             style="text-transform: uppercase" requiredMessage="Debe ingresar el Número a buscar" 
+                                             required="true" mask="#{config.maskCert}" />
+                                <p:commandButton value="Buscar por Número de Certificado" icon="fa fa-fw fa-search" 
+                                             actionListener="#{mbCert.poblarListado()}" update="frListCert,messages" />
+                            </h:panelGrid>
+                            <h:panelGrid id="pgBusqCuitTit" columns="3" cellpadding="2" rendered="#{mbCert.optBusqSelected.id eq 2}" >
+                                <p:outputLabel value="CUIT del Titular: " for="txtCuitTitBuscar"/>
+                                <p:inputNumber id="txtCuitTitBuscar" value="#{mbCert.busqCuitTit}" thousandSeparator="" decimalPlaces="0" 
+                                               requiredMessage="Debe ingresar un CUIT del Titular de los Certificados a buscar" required="true" />
+                                <p:commandButton value="Buscar por Cuit Titular" icon="fa fa-fw fa-search" 
+                                             actionListener="#{mbCert.poblarListado()}" update="frListCert" />
+                            </h:panelGrid>
+                            <h:panelGrid id="pgBusqAutFuente" columns="3" cellpadding="2" rendered="#{mbCert.optBusqSelected.id eq 3}" >
+                                <p:outputLabel value="Autorización fuente" for="txtAutFuenteBuscar"/>
+                                <p:inputMask placeholder="#{config.maskInstrumento}" id="txtAutFuenteBuscar" value="#{mbCert.busqNumFuente}" 
+                                             style="text-transform: uppercase" requiredMessage="Debe ingresar el Número" 
+                                             required="true" mask="#{config.maskInstrumento}" />
+                                <p:commandButton value="Buscar por Autorización fuente" icon="fa fa-fw fa-search" 
+                                             actionListener="#{mbCert.poblarListado()}" update="frListCert" />
+                            </h:panelGrid>
+                            <h:panelGrid id="pgBusqEstGuia" columns="3" cellpadding="2" rendered="#{mbCert.optBusqSelected.id eq 4}" >
+                                <p:outputLabel value="Estado actual: " for="cmbEstCert"/>
+                                <p:selectOneMenu required="true" requiredMessage="Debe ingresar el Estado de Certificados a buscar" id="cmbEstCert" 
+                                                 value="#{mbCert.busqEstadoCertSelected}" converter="omnifaces.SelectItemsConverter" >
+                                    <f:selectItem itemLabel="Seleccione el estado de los Certificados" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{mbCert.lstBusqEstadosCert}" 
+                                                   var="estABusc" itemLabel="#{estABusc.nombre}" itemValue="#{estABusc}"/>
+                                </p:selectOneMenu> 
+                                <p:commandButton value="Buscar por Estado de Certificado" icon="fa fa-fw fa-search" 
+                                             actionListener="#{mbCert.poblarListado()}" update="frListCert" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <p:outputLabel value="No se registran certificados con los parámetros ingresados." 
+                                       style="font-size: 20px !important; color: #8A0829" rendered="#{mbCert.busqSinResultados}" />
+                    </p:panel>
+                    
+                    <!-- Listado -->
+                    <p:panel id="pnTabla" header="Listado" style="margin-bottom:10px;" rendered="#{mbCert.listado.size() > 0}">
+                        <p:dataTable styleClass="table" value="#{mbCert.listado}"
+                                     filteredValue="#{mbCert.listadoFilter}"
+                             var="cert"
+                             id="dtGuia" 
+                             rows="5"
+                             paginator="true"      
+                             widgetVar="certTable"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                <p:commandButton icon="fa fa-fw fa-refresh" value="Limpiar filtros" 
+                                         onclick="PF('certTable').clearFilters()" update="dtGuia"/>
+                                <p:commandButton id="toggler" type="button" value="Columnas" icon="ui-icon-calculator" style="margin-left: 10px" />
+                                <p:columnToggler datasource="dtGuia" trigger="toggler" />
+                                <h:commandLink>
+                                    <p:outputLabel value="Exportar listado" />
+                                    <p:dataExporter type="xls" target="dtGuia" fileName="Guías" />
+                                </h:commandLink>   
+                            </f:facet>
+                            <p:column headerText="id" style="width:25px">
+                                <p:outputLabel value="#{cert.id}"/>
+                            </p:column>
+                            <p:column headerText="Tipo" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.tipo.nombre}" 
+                                filterBy="#{cert.tipo.nombre}" >
+                                <p:outputLabel value="#{cert.tipo.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Número" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.codigo}" 
+                                filterBy="#{cert.codigo}" >
+                                <p:outputLabel value="#{cert.codigo}"/>
+                            </p:column>
+                            <p:column  headerText="Alta" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.fechaAlta}" 
+                                filterBy="#{cert.fechaAlta}" >
+                                <p:outputLabel value="#{cert.fechaAlta}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Emisión" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.fechaEmisionGuia}" 
+                                filterBy="#{cert.fechaEmisionGuia}" >
+                                <p:outputLabel value="#{cert.fechaEmisionGuia}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Vencimiento" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.fechaVencimiento}" 
+                                filterBy="#{cert.fechaVencimiento}" >
+                                <p:outputLabel value="#{cert.fechaVencimiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Titular" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.origen.nombreCompleto} - #{cert.origen.cuit}" 
+                                filterBy="#{cert.origen.nombreCompleto} - #{cert.origen.cuit}" >
+                                <p:outputLabel value="#{cert.origen.nombreCompleto} - #{cert.origen.cuit}" />
+                            </p:column>  
+                            <p:column headerText="Procedencia" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.origen.localidad} - #{cert.origen.departamento}" 
+                                filterBy="#{cert.origen.localidad} - #{cert.origen.departamento}" >
+                                <p:outputLabel value="#{cert.origen.localidad} - #{cert.origen.departamento}" />
+                            </p:column>
+                            <p:column headerText="Fuente" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.tipoFuente.nombre} - #{cert.numFuente}" 
+                                filterBy="#{cert.tipoFuente.nombre} - #{cert.numFuente}" >
+                                <p:outputLabel value="#{cert.tipoFuente.nombre} - #{cert.numFuente}" />
+                            </p:column>
+                            <p:column headerText="Estado" 
+                                filterMatchMode="contains"
+                                sortBy="#{cert.estado.nombre}" 
+                                filterBy="#{cert.estado.nombre}" >
+                                <p:outputLabel value="#{cert.estado.nombre}" />
+                            </p:column>
+
+                            <p:column style="width:30px" exportable="false">
+                                <p:commandButton styleClass="fa" icon="fa fa-fw fa-search-plus" title="Ver detalle" process="@this" 
+                                                 update="@form" action="#{mbCert.prepareViewDetalle()}" >
+                                    <f:setPropertyActionListener value="#{cert}" target="#{mbCert.cert}" /> 
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>

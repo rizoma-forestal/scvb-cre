@@ -1,0 +1,69 @@
+# Directories #
+build/
+bin/
+target/
+doc/
+template/
+
+# ignoro el apidoc
+apidoc.json
+
+ 
+# OS Files #
+.DS_Store
+ 
+*.class
+ 
+# Package Files #
+*.jar
+*.war
+*.ear
+*.db
+
+# ignoro el pom
+pom.xml
+
+# ignoro los escudos
+src/main/webapp/resources/img/escudo.gif
+src/main/webapp/resources/img/favicon.ico
+
+# ignoro los reportes principales y el logo
+src/main/webapp/resources/reportes/colte.jrxml
+src/main/webapp/resources/reportes/colte.jasper
+src/main/webapp/resources/reportes/guia.jrxml
+src/main/webapp/resources/reportes/guia.jasper
+src/main/webapp/resources/reportes/guiaTransp.jrxml
+src/main/webapp/resources/reportes/guiaTransp.jasper
+src/main/webapp/resources/reportes/guiaAcopio.jrxml
+src/main/webapp/resources/reportes/guiaAcopio.jasper
+src/main/webapp/resources/reportes/volante.jrxml
+src/main/webapp/resources/reportes/volante.jasper
+src/main/webapp/resources/reportes/form.jrxml
+src/main/webapp/resources/reportes/form.jasper
+src/main/webapp/resources/reportes/logo.jpg
+src/main/webapp/resources/reportes/logo.gif
+src/main/webapp/resources/reportes/pie.jpg
+src/main/webapp/resources/reportes/pie.gif
+ 
+######################
+# Windows
+######################
+ 
+# Windows image file caches
+Thumbs.db 
+ 
+# Folder config file
+Desktop.ini
+ 
+ 
+# Thumbnails
+._*
+ 
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+ 
+######################
+# NetBeans
+######################
+nb-configuration.xml

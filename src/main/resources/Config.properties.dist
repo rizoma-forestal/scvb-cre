@@ -1,0 +1,275 @@
+# Parámetros dinámicos de acceso a servicios
+Server=http://localhost:8080
+#Server=http://sacvefor.test.bosquesnativos.net.ar
+## Servidor del RUE, en desa y prod es 8080, en pruebas es 8180 ##
+ServerEntidades=http://localhost:8080
+## Servidor del TRAZ, en todos los casos es 8080 si comparte server ##
+ServerTrazabilidad=http://localhost:8080
+## Servidor del CTRL, en todos los casos es 8080 si comparte server ##
+ServerCtrlVerif=http://localhost:8080
+## Servidor de TERR y TAX, en desa es 8080, en prod y pruebas es 8280 ##
+ServerServiciosLectura=http://localhost:8080
+## uri realitivas ##
+UrlTerritorial=/gestionTerritorial/rest
+UrlEspecies=/especiesVegetales/rest
+UrlEntidades=/rue/rest
+UrlTrazabilidad=/trazabilidad/rest
+UrlCtrlVerif=/ctrlVerif/rest
+
+# Usuarios de acceso a API's REST:
+# UsRestTax y UsRestTerr => sacvefor (para los servicios de taxonomías y territorial)
+# UsRestRue => admin [Provincia] para el estándar y admin_[provincia] (admin_jujuy, admin santiago, admin salta) para los locales (para el RUE)
+# UsRestSvf => cgl-[provincia] para las provincias y gestionLocal para el estándar (para TRAZ y CTRL)
+UsRestTax=sacvefor
+UsRestTerr=sacvefor
+UsRestRue=admin [Provincia]
+UsRestSvf=gestionLocal
+# Tiempo de vigencia del token recibido
+TimeToken=3600000
+
+# Define si registra y emite guías desde un sistema local
+emiteRemota=si
+
+# Define si trabaja o no con obrajeros
+TieneObrajeros=si
+
+# Parámetros de Gestión de Trazabilidad
+TrazServer=http://localhost:8080
+#TrazServer=http://sacvefor.test.bosquesnativos.net.ar
+TrazRutaAplicacion=/trazabilidad
+
+# Parámetros provinciales
+IdProvinciaGt=0
+Gobierno=Gobierno de la Provincia de [Provincia]
+Provincia=[Provincia]
+AutoridadLocal=Dirección de Bosques de [Provincia]
+DependienteDe=[Area superior]
+DomicilioAutLocal=[Domicilio Autoridad local]
+CorreoAutLocal=[email@autoridadlocal.gob.ar]
+TelAutLocal=[Teléfono Autoridad local]
+
+# Información general
+InfoGral=La presente es una versión de pruebas, para la cual solo habrá un rol de Usuarios: ADMINISTRADOR, con el cual se realizarán todas las operaciones, para luego, en función de las pruebas realizadas, definir los roles y sus correspondientes operaciones asociadas para cada caso.
+
+# Claves para encriptar y desencriptar las contraseñas de los usurios
+ClaveEncriptar=bosquesnativosycomunidad
+ClaveDesencriptar=localcompleto
+
+# Definición Inmueble (o predio)
+Inmueble=Inmueble
+
+# Definición de clase o estado de productos
+Clase=Estado
+
+# Definición de Producto forestal para permitir su extracción
+Producto=Producto
+
+# Roles personas
+Proponente=PROPONENTE
+Tecnico=TECNICO
+Apoderado=APODERADO
+Destinatario=DESTINATARIO
+Transportista=TRANSPORTISTA
+Obrajero=OBRAJERO
+
+# Mensajes de impresión de formularios
+ImprimeFormularios=si
+MsgImpFormVencida=Solo se podrían imprimir formularios provisorios para guías que se encuentren dentro de su período de vigencia.
+MsgImpFormVigente=Podrá emitir los los formularios provisorios que considere necesarios, el productor podrá completar los datos en papel. Cada formulario provisorio amparará el movimiento de productos desde el predio hasta la Delegación forestal en la cual se emitirá la guía. Dicha guía no podrá contener más productos, en tipo y cantidad, que los indicados en el formulario. Se deberá consignar la Delegación forestal destinataria, la cantidad de horas de vigencia a partir de la fecha de salida que será registrada en papel por el productor.
+
+# Mensajes de cancelación de guías
+MsgCancelVencida=Solo se podrán cancelar las guías durante su período de vigencia.
+MsgCancelVigente=Ingrese las razones por las cuales va a cancelar la guía. Recuerde que una vez cancelada los movimientos de productos quedarán sin efecto y los saldos descontados serán reintegrados a las fuentes de descuento. Finalmente podrá completar la acción mediante el botón 'Aceptar' o limpiar el campo de texto mediante el botón 'Limpiar'. Una vez cancelada la guía, la operación no podrá volverse atrás.
+
+# Tipos de Items productivos
+Autorizados=AUTORIZADOS
+Extraidos=EXTRAIDOS
+
+# Letras de Guías
+Ext=EE
+Trans=TT
+ExtYTrans=ET
+
+# Tipos de Fuente
+Autorizacion=AUTORIZACION
+GuiaMadre=GUIA MADRE
+
+# Tipos de Enitdad Guía
+TegFuente=ORIGEN
+TegDestino=DESTINO
+
+# Tipos de discriminación para tasas. Cada tasa que lee de aquí la discriminación deberá tener seteado en el atributo 'conf' 
+# el contenido de la variable correspondiente.
+#################################################
+# Si al liquidar tasas discrimina según el origen del predio.
+DiscTasaOrigen=si
+CondAforoFiscal=FISCAL CON AFORO
+# Si al liquidar tasas discrimina según el destino de la guía sea interno o externo a la provincia
+CondDerInspExt=DESTINO EXTERNO
+CondDerInspInt=DESTINO INTERNO
+# Si al liquidar tasas discrimina según el tipo de intervención autorizada.
+IntervPCUS=CAMBIO USO DEL SUELO
+IntervPM=PLAN MANEJO SOSTENIBLE
+
+# Mostrar destino asignado a los productos en una guía de extracción
+DiscTasaDestExt=si
+# Permitir emisión de guías con tasas sin la acreditación del pago
+EmiteSinPagos=no
+CantEmitSinPago=0
+# Muestra la Autorización en las guías
+MuestraAutGuias=si
+# Muestra datos catastrales del predio
+MuestraPredioGuias=si
+# Muestra destino externo/interno
+MuestraDestinoGuias=si
+# Si el inmueble puede subdividirse en rodales
+GestionaRodales=si
+
+# ------------------------------------------------------------ #
+# Tipos de Parámetros y estados de Cotrol y Verificación (CCV) #
+# ------------------------------------------------------------ #
+
+CtrlTipoParamEstGuia=EST_GUIAS
+CtrlGuiaCancelada=CANCELADA
+
+# ------------- #
+# Títulos Menús #
+# ------------- #
+# Inicio
+Inicio=Inicio
+# Administración
+Administracion=Administración
+InformacionGeneral=Información general
+EntidadesParametricas=Entidades Paramétricas
+TiposParametros=Tipos de Parámetros
+ProdUnidadesMedida=Unidades de medida
+ProdClases=Clases
+ProdEspeciesLocal=Especies locales
+Productos=Productos forestales
+Delegaciones=Delegaciones forestales
+
+# Autorizaciones
+Instrumento=Resolución
+Autorizaciones=Autorizaciones
+Gestionar=Gestionar
+Ver=Ver
+ZonasIntervencion=Zonas de Itervención
+SubZonasIntervencion=Sub zonas
+EstadosAut=Estados de Autorización
+Tecnicos=Técnicos
+Proponentes=Proponentes
+Apoderados=Apoderados
+Inmuebles=Inmuebles
+Estado=Estado
+# Guías
+Guias=Guías
+Origen=Origen
+Destino=Destino
+Destinatarios=Destinatarios
+Obrajeros=Obrajeros
+Transporte=Transporte
+Transportistas=Transportistas
+Vehiculos=Vehículos
+Marcas=Marcas
+Modelos=Modelos
+Tasas=Tasas
+Emision=Emisión
+# Certificados
+Cert=Certificados
+# Parámetros específicos
+EstadosDoc=Estados
+TiposDoc=Tipos
+CopiasDoc=Copias por Tipo
+
+# Reportes
+Reportes=Reportes
+RepProductosMovidos=Productos removidos
+RepProductosAutorizados=Productos autorizados
+RepSuperficiesAutorizaciones=Superficies autorizadas
+
+# Seguridad
+Usuarios=Usuarios
+
+# ---------------------------------------------------- #
+# Rutas #
+# La primera es para windows, la segunda es para linux #
+# ---------------------------------------------------- #
+RutaArchivos=C:\\wildfly\\resources
+#RutaArchivos=/opt/wildfly/welcome-content
+SubdirTemp=C:\\wildfly\\TMP\\
+#SubdirTemp=/opt/wildfly/welcome-content/TMP/
+SubdirMartillos=\\martillos\\
+#SubdirMartillos=/martillos/[provincia]/
+UrlMartillos=/martillos/
+#UrlMartillos=/martillos/[provincia]/
+# ----------------------------------------------------------- #
+# Archivos de imagen de martillos sin obrajero y sin martillo #
+# ----------------------------------------------------------- #
+MrtSinObrajero=sinObrajero.jpg
+MrtSinMartillo=sinMartillo.jpg
+
+# ------------------- #
+# Tipos de parámetros #
+# ------------------- #
+UsoSuelo=USO_SUELO
+RolUsuarios=ROL_USUARIOS
+TipoNumerico=TIPO_NUMERICO
+RolPersonas=ROL_PERSONAS
+TipoInterv=TIPO_INTERVENCION
+TipoAut=TIPO_AUTORIZACION
+TipoItem=TIPO_ITEM
+TipoTasa=TIPO_TASA
+TipoFuente=TIPO_FUENTE
+TipoEntidadGuia=TIPO_ENT_GUIA
+OrigenPredio=ORIGEN_PREDIO
+
+# ----------------------- #
+# Roles de usuarios local #
+# ----------------------- #
+
+Administrador=ADMINISTRADOR
+RegAut=REGISTRADOR DE AUTORIZACIONES
+RegGuias=REGISTRADOR DE GUIAS
+Consulta=CONSULTA
+Pruebas=PRUEBAS
+
+# --------------------------------- #
+# Roles de Usuarios de Trazabilidad #
+# --------------------------------- #
+Transformador=TRANSFORMADOR
+Acopiador=ACOPIADOR
+
+# ------------------------- #
+# Códigos de estados de Aut #
+# ------------------------- #
+AutInicial=INI
+AutHabilitado=HAB
+AutBloqueado=BLQ
+AutSuspendido=SUS
+
+# --------------------------- #
+# Códigos de estados de Guías #
+# --------------------------- #
+GuiaCancelada=CANCELADA
+GuiaInicial=CARGA INICIAL
+GuiaConProductos=CON PRODUCTOS
+GuiaLiquidada=LIQUIDADA
+GuiaEmitida=EMITIDA
+GuiaCerrada=CERRADA
+GuiaTransito=EN TRANSITO
+GuiaIntervenida=INTERVENIDA
+GuiaSecuestrada=SECUESTRADA
+GuiaExtraviada=EXTRAVIADA
+GuiaConTransporte=CON TRANSP. Y PROD.
+GuiaSinTransporte=GUIA CON PROD. SIN TRANSP.
+GuiaConDestino=CON DEST. Y PROD.
+GuiaConProdAEmitir=CON PROD. A EMITIR
+
+# -------- #
+# Máscaras #
+# -------- #
+maskCatastro=a-9999
+maskInstrumento=999/9999/aaaa
+maskExpediente=9999-999-a-9999
+maskGuia=aa-9-99999-9999
+maskCert=99999/9999
