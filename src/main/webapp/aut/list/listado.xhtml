@@ -206,7 +206,7 @@
                         </h:panelGrid>
                         <p:separator rendered="#{mbAutorizacion.view}" />
                         <h:panelGrid columns="1" rendered="#{mbAutorizacion.lstGuias.size() ne 0}" >
-                            <p:commandButton value="Ver Guías" icon="fa fa-fw fa-external-link" process="@this" 
+                            <p:commandButton value="Ver #{config.Cert}" icon="fa fa-fw fa-external-link" process="@this" 
                                              update="pnViewGuias" oncomplete="PF('dlgVerGuias').show();"/>
                         </h:panelGrid>
                         <p:separator rendered="#{mbAutorizacion.view}" />
@@ -225,8 +225,8 @@
                         </h:panelGrid>
                     </p:panel>
                     
-                    <!-- Diálogo para ver las Guías vinculadas a la Autorización -->
-                    <p:dialog header="Guías emitidas" widgetVar="dlgVerGuias" minHeight="40" closable="false">
+                    <!-- Diálogo para ver las Certificados vinculados a la Autorización -->
+                    <p:dialog header="#{config.Cert} emitidos" widgetVar="dlgVerGuias" minHeight="40" closable="false">
                         <p:panel id="pnViewGuias" style="margin-bottom:10px; width: 800px">
                             <h:panelGrid columns="2" >
                                 <p:dataTable styleClass="table" value="#{mbAutorizacion.lstGuias}"

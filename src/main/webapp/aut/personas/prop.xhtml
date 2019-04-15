@@ -322,8 +322,8 @@
                     </p:panel>
                 </p:dialog>
                 
-                <!-- Diálogo para obtener las Guías vinculadas -->
-                <p:dialog header="Guías vinculadas" widgetVar="dlgVerGuias" minHeight="40" closable="false">
+                <!-- Diálogo para obtener los Certificados vinculados -->
+                <p:dialog header="Certificados vinculados" widgetVar="dlgVerGuias" minHeight="40" closable="false">
                     <p:panel id="pnViewGuias" style="margin-bottom:10px; width: 800px">
                         <h:panelGrid columns="2" >
                             <p:dataTable styleClass="table" value="#{mbPersona.lstGuias}"
@@ -443,7 +443,7 @@
                             <p:commandButton value="Ver Autorizaciones" icon="fa fa-fw fa-external-link" process="@this" update="pnViewAut" 
                                              actionListener="#{mbPersona.prepareViewAut(config.Proponente)}" 
                                              oncomplete="PF('dlgVerGuias').hide(), PF('dlgBuscarRue').hide(), PF('dlgVerAut').show();" />
-                            <p:commandButton value="Ver Guías" icon="fa fa-fw fa-external-link" process="@this" update="pnViewGuias" 
+                            <p:commandButton value="Ver #{config.Cert}" icon="fa fa-fw fa-external-link" process="@this" update="pnViewGuias" 
                                              actionListener="#{mbPersona.preparaViewGuias(config.TegFuente)}" 
                                              oncomplete="PF('dlgBuscarRue').hide(), PF('dlgVerAut').hide(), PF('dlgVerGuias').show();" />
                         </h:panelGrid>

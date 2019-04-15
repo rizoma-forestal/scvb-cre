@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body >
+        <h:panelGrid columns="2" cellpadding="10">
+            <img src="#{request.contextPath}/resources/img/file-1.png" width="50" height="50" style="float: left; margin-left: 15px" />
+            <p:outputLabel styleClass="titPanel" value="Emisión del Certificado" 
+                           rendered="#{config.EmiteSinPagos eq 'no' 
+                                       or mbCert.cert.estado.habilitaEmision}" />
+            <p:outputLabel styleClass="titPanel" value="Registro de pago de tasas" 
+                           rendered="#{config.EmiteSinPagos eq 'si' 
+                                       and mbCert.cert.estado.nombre eq config.GuiaEmitida 
+                                       and mbCert.cert.codRecibo eq null}" />
+            <p:outputLabel styleClass="titPanel" value="Registro de pago realizado" 
+                           rendered="#{config.EmiteSinPagos eq 'si' 
+                                       and mbCert.cert.estado.nombre eq config.GuiaEmitida 
+                                       and mbCert.cert.codRecibo ne null}" />
+        </h:panelGrid>
+        <h:panelGrid columns="1" >
+            <p:outputLabel value="Esta por emitir la guía sin acreditar el pago de tasas." style="font-size: 20px !important; color: #8A0829" 
+                               rendered="#{mbCert.cert.codRecibo eq 'TEMP' 
+                                           and mbCert.cert.tipo.abonaTasa 
+                                           and mbCert.cert.estado.nombre ne config.GuiaEmitida}"/>
+        </h:panelGrid>
+        <!-- Diálogo para confirmar la emisión sin registro de pago -->
+        <p:dialog header="Guías sin registro de pago" widgetVar="dlgVerGuiasSinPago" minHeight="40" closable="false">
+            <h:form prependId="false" id="frSinPagos">
+                <p:panel id="pnViewGuias" style="margin-bottom:10px; width: 700px">
+                    <p:outputLabel value="El titular de la Guía ya ha llegado al cupo máximo permitido de guías emitidas sin acreditar pago de tasas: #{config.CantEmitSinPago}" 
+                                   style="font-size: 20px !important; color: #8A0829" rendered="#{mbCert.guiasSinPago.size() >= config.CantEmitSinPago}" />
+                    <h:panelGrid columns="2" >
+                        <p:dataTable id="dtDestGuiasAdeudadas" value="#{mbCert.guiasSinPago}" var="guiaAdeud" 
+                                     styleClass="table" >
+                            <p:column headerText="id" style="width: 35px">
+                                <p:outputLabel value="#{guiaAdeud.id}"/>
+                            </p:column>
+                            <p:column headerText="Guía" style="width: 100px">
+                                <p:outputLabel value="#{guiaAdeud.codGuia}"/>
+                            </p:column>
+                            <p:column headerText="Emisión" >
+                                <p:outputLabel value="#{guiaAdeud.fechaEmision}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm aa" timeZone="GMT-03:00" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Vencimiento" >
+                                <p:outputLabel value="#{guiaAdeud.fechaVenc}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm aa" timeZone="GMT-03:00" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Total a pagar ($)" style="text-align: right !important;" >
+                                <p:outputLabel value="#{guiaAdeud.totalAdeudado}" >
+                                    <f:convertNumber type="currency"  currencySymbol=""/>
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column style="width:30px;" >
+                                <p:commandButton styleClass="fa" icon="fa fa-fw fa-file-pdf-o" title="Emitir volante"
+                                                 action="#{mbCert.emitirVolanteAdeudado()}" ajax="false" >
+                                    <f:setPropertyActionListener value="#{domLoc}" target="#{mbCert.domDestino}" /> 
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" >
+                        <p:commandButton title="Emitir la Guía sin el registro del pago de tasas" value="Emitir Guía" icon="fa fa-fw fa-file-pdf-o" 
+                                         action="#{mbCert.generarCodReciboTemp()}" ajax="false" update="frEmision,pMenuIndex,frame,messages" 
+                                         rendered="#{not mbCert.cert.estado.habilitaFuenteProductos 
+                                                     and mbSesion.usuario.rol.nombre ne config.Consulta
+                                                     and config.CantEmitSinPago > mbCert.guiasSinPago.size()}"/>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton title="Cerrar" icon="fa fa-fw fa-close" onclick="PF('dlgVerGuiasSinPago').hide();"/>
+                    </f:facet>
+            </p:panel>
+            </h:form>
+        </p:dialog>
+        <h:form prependId="false" id="frEmision">
+            <!-- Panel que recoge los datos del recibo de pago de tasas -->
+            <p:panel id="pnCodigoRecibo" header="Recibo de pago de tasas" rendered="#{mbCert.cert.tipo.abonaTasa and mbCert.cert.codRecibo eq null}" >
+                <p:outputLabel value="Ingrese el código del recibo de pagos de las Tasas liquidadas para la Guía, como paso previo para su emisión. " 
+                               style="font-style: italic; font-size: small" />
+                <p:outputLabel value="Podrá validar si es posible emitir la Guía sin el registro del pago de las tasas correspondientes mediante el botón 'Validar emisión'." 
+                               style="font-style: italic; font-size: small" 
+                               rendered="#{config.EmiteSinPagos eq 'si' 
+                                           and mbCert.cert.estado.nombre ne config.GuiaEmitida}" />
+                <h:panelGrid columns="2" >
+                    <p:outputLabel value="Código de recibo" for="codRecibo"/>
+                    <p:inputText id="codRecibo" value="#{mbCert.cert.codRecibo}" 
+                                 requiredMessage="Debe ingresar el código del recibo de pago de Tasas" required="true"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" cellspacing="2" >
+                    <p:commandButton title="Registrar el código de recibo de pagos de Tasas" value="Registrar" icon="fa fa-fw fa-save" 
+                                     action="#{mbCert.registrarCodRecibo()}" update="frEmision,pMenuIndex,frame,messages"/>
+                    <p:commandButton title="Validar si es posible la emisión sin el registro del pago de tasas" value="Validar emisión" icon="fa fa-fw fa-check" 
+                                     oncomplete="PF('dlgVerGuiasSinPago').show();" update="pnViewGuias"
+                                     rendered="#{config.EmiteSinPagos eq 'si' 
+                                                 and mbCert.cert.estado.nombre ne config.GuiaEmitida}" />
+                </h:panelGrid>
+            </p:panel>
+            
+            <!-- Panel que muestra los datos de la guía ya emitida -->
+            <p:panel id="pnGuiaEmitida" header="Guía emitida" rendered="#{mbCert.cert.estado.habilitaFuenteProductos}" >
+                <h:panelGrid id="pgTexto" columns="2" >
+                    <p:outputLabel value="Guía emitida con fecha: " style="font-size: 20px !important; color: #8A0829" 
+                                   rendered="#{mbCert.msgErrorEmision eq null and mbCert.msgExitoEmision eq null}" />
+                    <p:outputLabel value="#{mbCert.cert.fechaEmisionGuia}" 
+                                   style="font-size: 20px !important; color: #8A0829" 
+                                   rendered="#{mbCert.msgErrorEmision eq null and mbCert.msgExitoEmision eq null}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm aa" timeZone="GMT-03:00" />
+                    </p:outputLabel>
+                    <p:outputLabel value="#{mbCert.msgErrorEmision}" style="font-size: 16px !important; font-weight: bold; color: red" 
+                                   rendered="#{mbCert.msgErrorEmision ne null}" />
+                    <p:outputLabel value="#{mbCert.msgExitoEmision}" style="font-size: 16px !important; color: #0F8164" 
+                                   rendered="#{mbCert.msgExitoEmision ne null}" />
+                </h:panelGrid>
+            </p:panel>
+            
+            <!-- Panel que muestra los datos generales de la guía que se va a emitir -->
+            <p:panel id="pnGeneralGuia" header="Emisión de Certificado" 
+                     rendered="#{not mbCert.cert.estado.habilitaFuenteProductos 
+                                 and (not mbCert.cert.tipo.abonaTasa or mbCert.cert.codRecibo ne null)}" >
+                <h:panelGrid id="pgDatosGrales" columns="2" >
+                    <p:outputLabel value="Tipo: " for="tipo"/>
+                    <p:outputLabel id="tipo" value="#{mbCert.cert.tipo.nombre}" 
+                                   style=" font-weight: bold"/>
+                    <p:outputLabel value="Número: " for="numero"/>
+                    <p:outputLabel id="numero" value="#{mbCert.cert.codigo}" 
+                                   style=" font-weight: bold"/>
+                    <p:outputLabel value="Nombre completo del Titular: " for="titNombre"/>
+                    <p:outputLabel id="titNombre" value="#{mbCert.cert.origen.nombreCompleto}" 
+                                   style=" font-weight: bold"/>
+                    <p:outputLabel value="Cuit del Titular: " for="titCuit"/>
+                    <p:outputLabel id="titCuit" value="#{mbCert.cert.origen.cuit}" 
+                                   style=" font-weight: bold"/>
+                    <p:outputLabel value="Origen: " for="titOrigen" rendered="#{mbCert.cert.tipo.habilitaTransp}" />
+                    <p:outputLabel id="titOrigen" value="#{mbCert.cert.origen.localidad} - #{mbCert.cert.origen.provincia}" 
+                                   style=" font-weight: bold" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel value="Nombre completo del Destinatario: " for="destNombre" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel id="destNombre" value="#{mbCert.cert.destino.nombreCompleto}" 
+                                   style=" font-weight: bold" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel value="Cuit del Destinatiario: " for="destCuit" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel id="destCuit" value="#{mbCert.cert.destino.cuit}" 
+                                   style=" font-weight: bold" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel value="Destino: " for="destDestino" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel id="destDestino" value="#{mbCert.cert.destino.localidad} - #{mbCert.cert.destino.provincia}" 
+                                   style=" font-weight: bold" rendered="#{mbCert.cert.tipo.habilitaTransp}"/>
+                    <p:outputLabel value="Productos: " />
+                    <p:dataTable id="dtSubZonas" value="#{mbCert.cert.itemsAgrupados}" var="item" styleClass="table" style="width: 500px" >
+                        <p:column headerText="Especie" >
+                            <p:outputLabel value="#{item.nombreVulgar}"/>
+                        </p:column>
+                        <p:column headerText="#{config.Clase}" >
+                            <p:outputLabel value="#{item.clase}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: right !important">
+                            <p:outputLabel value="#{item.total}" >
+                                <f:convertNumber type="currency"  currencySymbol=""/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Unidad" >
+                            <p:outputLabel value="#{item.unidad}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                <!-- Formularios provisorios -->
+                <p:fieldset toggleable="true" legend="Formularios provisorios" style="margin-bottom:20px" 
+                            rendered="#{config.ImprimeFormularios eq 'si' and not mbCert.cert.tipo.descuentaAutoriz}">
+                    <!-- formulario -->
+                    <p:outputLabel value="Si la Guía que va a emitir está respaldada por uno o más formularios provisorios, podrá vincularlos completando el listado que está debajo. Podrá seleccionar la guía a partir de la cual se emitió el formulario, especificar su n° y asignarlo a la guía. La asinganción de formularios provisorios no es obligatoria. Si lo hace, tanto la selección de la guía emisora como el n° de orden del formulario son obligatorios." style="font-style: italic; font-size: small" />
+                    <p:separator />
+                    <h:panelGrid id="pgFormProv" columns="2" >
+                        <p:outputLabel value="Guía emisora: " for="cmbCert"/>   
+                        <p:selectOneMenu id="cmbCert" value="#{mbCert.guiaEmisoraSelected}" converter="omnifaces.SelectItemsConverter" >
+                            <f:selectItem itemLabel="Seleccione la Guía emisora" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{mbCert.lstGuiasEmisorasFormProv}" 
+                                           var="g" itemLabel="#{g.nombre}" itemValue="#{g}"/>
+                        </p:selectOneMenu> 
+                        <p:outputLabel value="N° de formulario: " for="numForm" />   
+                        <p:inputNumber id="numForm" value="#{mbCert.formProv.numFormuario}" decimalPlaces="0" minValue="0" />
+                    </h:panelGrid>
+
+                </p:fieldset>
+
+                <!-- botón de emisión -->
+                <h:panelGrid id="pgBoton" columns="1" >
+                    <p:commandButton title="Emitir un archivo pdf con con los datos registrados del Certificado" value="Emitir Certificado" icon="fa fa-fw fa-file-pdf-o" 
+                                     action="#{mbCert.emitir()}" ajax="false" update="frEmision,pMenuIndex,frame,messages" 
+                                     rendered="#{not mbCert.cert.estado.habilitaFuenteProductos 
+                                                 and mbSesion.usuario.rol.nombre ne config.Consulta}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>            
+

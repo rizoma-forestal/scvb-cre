@@ -21,6 +21,15 @@
                                             actionListener="#{mbCert.cargarFrame('productos.xhtml')}" />
                                 <p:menuitem disabled="#{mbCert.cert.id eq null or mbCert.edit}" update="frame" ajax="true" value="#{config.Emision}"
                                             actionListener="#{mbCert.cargarFrame('emision.xhtml')}" rendered="#{mbCert.cert.estado.habilitaEmision}" />
+                                <p:menuitem disabled="#{mbCert.cert.id eq null or mbCert.edit}" update="frame" ajax="true" value="Extender vigencia"
+                                            actionListener="#{mbCert.cargarFrame('extender.xhtml')}" 
+                                            rendered="#{mbCert.cert.estado.nombre eq config.GuiaEmitida
+                                                        and mbSesion.usuario.rol.nombre ne config.Consulta}" />
+                                <p:menuitem disabled="#{mbCert.cert.id eq null or mbCert.edit}" update="frame" ajax="true" value="Cancelar"
+                                            actionListener="#{mbCert.cargarFrame('cancelar.xhtml')}" 
+                                            rendered="#{mbCert.cert.estado.habilitaFuenteProductos 
+                                                        and not mbCert.cert.tipo.habilitaDesc 
+                                                        and mbSesion.usuario.rol.nombre ne config.Consulta}" />
                             </p:submenu>
                         </p:panelMenu>
                     </h:form>
