@@ -1,13 +1,12 @@
 # Archivo de configuraciones estáticas
-Aplicacion=SACVeFor - Gestión local
+Aplicacion=SACVeBio - Registro de tenencia y movimiento de productos
 
-RutaAplicacion=/gestionLocal
+RutaAplicacion=/scvb-cre
 
 TimeZone=America/Buenos_Aires
 
-# Claves para encriptar y desencriptar las contraseñas de los usurios a validar para el acceso de la API REST
+# Clave para encriptar las contraseñas de los usurios a validar para el acceso de la API REST
 ClaveEncriptar=ministeriodeambiente
-ClaveDesencriptar=zorbazorbas
 
 # Rutas
 EntidadesParametricas=faces/param

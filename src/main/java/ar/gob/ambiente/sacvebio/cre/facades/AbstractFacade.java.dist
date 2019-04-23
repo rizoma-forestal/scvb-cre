@@ -1,5 +1,5 @@
 
-package ar.gob.ambiente.sacvefor.localcompleto.facades;
+package ar.gob.ambiente.sacvebio.cre.facades;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -16,7 +16,7 @@ public abstract class AbstractFacade<T> {
     /**
      * Unidad de pesistencia, se modificará con la correspondiente a cada componente provincial
      */
-    @PersistenceContext(unitName = "sacvefor-gestionLocalCompletoPU")
+    @PersistenceContext(unitName = "sacvebio-registroEmisionPU")
     
     /**
      * Variable privada: EntityManager para gestionar el acceso a datos
