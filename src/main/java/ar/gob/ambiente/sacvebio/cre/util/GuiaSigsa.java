@@ -9,7 +9,7 @@ import java.util.List;
  * Temporal, hasta la definición de SENASA
  * @author rincostante
  */
-public class Guia {
+public class GuiaSigsa {
     
     /**
      * Variable privada: Identificador único
@@ -210,10 +210,10 @@ public class Guia {
     @Override
     public boolean equals(Object obj) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(obj instanceof Guia)) {
+        if (!(obj instanceof GuiaSigsa)) {
             return false;
         }
-        Guia other = (Guia) obj;
+        GuiaSigsa other = (GuiaSigsa) obj;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

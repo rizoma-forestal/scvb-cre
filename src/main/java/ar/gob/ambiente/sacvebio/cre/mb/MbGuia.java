@@ -2,7 +2,7 @@
 package ar.gob.ambiente.sacvebio.cre.mb;
 
 import ar.gob.ambiente.sacvebio.cre.util.EntidadServicio;
-import ar.gob.ambiente.sacvebio.cre.util.Guia;
+import ar.gob.ambiente.sacvebio.cre.util.GuiaSigsa;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,17 +17,17 @@ public class MbGuia {
     /**
      * Variable privada: objeto principal a gestionar
      */
-    private Guia guia;
+    private GuiaSigsa guia;
     
     /**
      * Variable privada: listado de las guías existentes
      */
-    private List<Guia> listado;
+    private List<GuiaSigsa> listado;
     
     /**
      * Variable privada: listado para filtrar la tabla de guías existentes
      */
-    private List<Guia> listadoFilter;    
+    private List<GuiaSigsa> listadoFilter;    
     
     /**
      * Variable privada: flag que indica que la guía que se está gestionando no está editable
@@ -57,19 +57,19 @@ public class MbGuia {
         
     }
 
-    public List<Guia> getListado() {
+    public List<GuiaSigsa> getListado() {
         return listado;
     }
 
-    public void setListado(List<Guia> listado) {
+    public void setListado(List<GuiaSigsa> listado) {
         this.listado = listado;
     }
 
-    public List<Guia> getListadoFilter() {
+    public List<GuiaSigsa> getListadoFilter() {
         return listadoFilter;
     }
 
-    public void setListadoFilter(List<Guia> listadoFilter) {
+    public void setListadoFilter(List<GuiaSigsa> listadoFilter) {
         this.listadoFilter = listadoFilter;
     }
 
@@ -81,11 +81,11 @@ public class MbGuia {
         this.busqSinResultados = busqSinResultados;
     }
 
-    public Guia getGuia() {
+    public GuiaSigsa getGuia() {
         return guia;
     }
 
-    public void setGuia(Guia guia) {
+    public void setGuia(GuiaSigsa guia) {
         this.guia = guia;
     }
 

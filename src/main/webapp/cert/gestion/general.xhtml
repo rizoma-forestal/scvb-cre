@@ -23,7 +23,7 @@
                         <p:ajax update="pnBuscar" resetValues="true" />
                     </p:commandButton>
                     <p:commandButton title="Crear una nueva Guía" styleClass="save" icon="fa fa-fw fa-plus"
-                                     value="Crear nueva" process="@this" action="#{mbCert.prepareNew()}" update="@form,pMenuIndex" 
+                                     value="Crear nuevo" process="@this" action="#{mbCert.prepareNew()}" update="@form,pMenuIndex" 
                                      rendered="#{mbSesion.usuario.rol.nombre ne config.Consulta}" />
                 </h:panelGrid>
             </p:panel>
