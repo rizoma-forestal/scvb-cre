@@ -28,7 +28,7 @@ UsRestSvf=gestionLocal
 TimeToken=3600000
 
 # Define si registra y emite guías desde un sistema local
-emiteRemota=si
+emiteRemota=no
 
 # Define si trabaja o no con obrajeros
 TieneObrajeros=si
@@ -39,14 +39,14 @@ TrazServer=http://localhost:8080
 TrazRutaAplicacion=/trazabilidad
 
 # Parámetros provinciales
-IdProvinciaGt=0
-Gobierno=Gobierno de la Provincia de [Provincia]
+IdProvinciaGt=25
+Gobierno=Secretaría de Gobierno de Ambiente y Desarrollo Sustentable de la Nación
 Provincia=[Provincia]
-AutoridadLocal=Dirección de Bosques de [Provincia]
-DependienteDe=[Area superior]
-DomicilioAutLocal=[Domicilio Autoridad local]
-CorreoAutLocal=[email@autoridadlocal.gob.ar]
-TelAutLocal=[Teléfono Autoridad local]
+AutoridadLocal=Dirección Nacional de Biodiversidad
+DependienteDe=Secretaría de Política Ambiental en Recursos Naturales
+DomicilioAutLocal=San Martín 451, Ciudad Autónoma de Buenos Aires
+CorreoAutLocal=rincostante@ambiente.gob.ar
+TelAutLocal=(54-11) 5218-4640
 
 # Información general
 InfoGral=La presente es una versión de pruebas, para la cual solo habrá un rol de Usuarios: ADMINISTRADOR, con el cual se realizarán todas las operaciones, para luego, en función de las pruebas realizadas, definir los roles y sus correspondientes operaciones asociadas para cada caso.
@@ -77,9 +77,9 @@ ImprimeFormularios=si
 MsgImpFormVencida=Solo se podrían imprimir formularios provisorios para guías que se encuentren dentro de su período de vigencia.
 MsgImpFormVigente=Podrá emitir los los formularios provisorios que considere necesarios, el productor podrá completar los datos en papel. Cada formulario provisorio amparará el movimiento de productos desde el predio hasta la Delegación forestal en la cual se emitirá la guía. Dicha guía no podrá contener más productos, en tipo y cantidad, que los indicados en el formulario. Se deberá consignar la Delegación forestal destinataria, la cantidad de horas de vigencia a partir de la fecha de salida que será registrada en papel por el productor.
 
-# Mensajes de cancelación de guías
-MsgCancelVencida=Solo se podrán cancelar las guías durante su período de vigencia.
-MsgCancelVigente=Ingrese las razones por las cuales va a cancelar la guía. Recuerde que una vez cancelada los movimientos de productos quedarán sin efecto y los saldos descontados serán reintegrados a las fuentes de descuento. Finalmente podrá completar la acción mediante el botón 'Aceptar' o limpiar el campo de texto mediante el botón 'Limpiar'. Una vez cancelada la guía, la operación no podrá volverse atrás.
+# Mensajes de cancelación de cert
+MsgCancelVencida=Solo se podrán cancelar los Certificados durante su período de vigencia.
+MsgCancelVigente=Ingrese las razones por las cuales va a cancelar el Certificado. Recuerde que una vez cancelado los movimientos de productos quedarán sin efecto y los saldos descontados serán reintegrados a las fuentes de descuento. Finalmente podrá completar la acción mediante el botón 'Aceptar' o limpiar el campo de texto mediante el botón 'Limpiar'. Una vez cancelado el Certificado, la operación no podrá volverse atrás.
 
 # Tipos de Items productivos
 Autorizados=AUTORIZADOS
@@ -123,7 +123,7 @@ MuestraPredioGuias=si
 # Muestra destino externo/interno
 MuestraDestinoGuias=si
 # Si el inmueble puede subdividirse en rodales
-GestionaRodales=si
+GestionaRodales=no
 
 # ------------------------------------------------------------ #
 # Tipos de Parámetros y estados de Cotrol y Verificación (CCV) #
@@ -143,13 +143,13 @@ InformacionGeneral=Información general
 EntidadesParametricas=Entidades Paramétricas
 TiposParametros=Tipos de Parámetros
 ProdUnidadesMedida=Unidades de medida
-ProdClases=Clases
+ProdClases=Estados
 ProdEspeciesLocal=Especies locales
-Productos=Productos forestales
+Productos=Productos
 Delegaciones=Delegaciones forestales
 
 # Autorizaciones
-Instrumento=Resolución
+Instrumento=Disposición
 Autorizaciones=Autorizaciones
 Gestionar=Gestionar
 Ver=Ver
@@ -199,9 +199,9 @@ RutaArchivos=C:\\wildfly\\resources
 SubdirTemp=C:\\wildfly\\TMP\\
 #SubdirTemp=/opt/wildfly/welcome-content/TMP/
 SubdirMartillos=\\martillos\\
-#SubdirMartillos=/martillos/[provincia]/
+#SubdirMartillos=/martillos/cgl-standar/
 UrlMartillos=/martillos/
-#UrlMartillos=/martillos/[provincia]/
+#UrlMartillos=/martillos/cgl-standar/
 # ----------------------------------------------------------- #
 # Archivos de imagen de martillos sin obrajero y sin martillo #
 # ----------------------------------------------------------- #
@@ -222,6 +222,7 @@ TipoTasa=TIPO_TASA
 TipoFuente=TIPO_FUENTE
 TipoEntidadGuia=TIPO_ENT_GUIA
 OrigenPredio=ORIGEN_PREDIO
+TipoGuiaCert=COLTE
 
 # ----------------------- #
 # Roles de usuarios local #
@@ -261,7 +262,7 @@ GuiaIntervenida=INTERVENIDA
 GuiaSecuestrada=SECUESTRADA
 GuiaExtraviada=EXTRAVIADA
 GuiaConTransporte=CON TRANSP. Y PROD.
-GuiaSinTransporte=GUIA CON PROD. SIN TRANSP.
+GuiaSinTransporte=CON PROD. S/TRANSP.
 GuiaConDestino=CON DEST. Y PROD.
 GuiaConProdAEmitir=CON PROD. A EMITIR
 
@@ -271,5 +272,5 @@ GuiaConProdAEmitir=CON PROD. A EMITIR
 maskCatastro=a-9999
 maskInstrumento=999/9999/aaaa
 maskExpediente=9999-999-a-9999
-maskGuia=aa-9-99999-9999
-maskCert=99999/9999
+maskGuia=aa-99-99999-9999
+maskCert=aaaaa-99-99999-9999
